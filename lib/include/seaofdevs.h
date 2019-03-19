@@ -11,7 +11,7 @@ typedef struct game_s game_t;
 /**
  * @brief Structure qui definit une carte de Sea Of Devs.
  * 
- * char *typeCarte : Type de la carte, carre ou un rectangle.
+ * char *typeCarte : Type de la carte.
  * int tailleX     : Largeur de la carte.
  * int tailleY     : Hauteur de la carte.
  */

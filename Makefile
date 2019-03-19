@@ -18,7 +18,7 @@ OBJ = $(SRC:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 
 ## Autres .....................................................................:
 
-ARGS =
+ARGS = file/fichier.sod
 
 ## Lancement ..................................................................:
 
@@ -44,7 +44,6 @@ clean :
 	$(info Suppression de $(EXEC) et de $(OBJ) :)
 	rm -f $(EXEC)
 	rm -f $(OBJ)
-	rm -f .fuse_hidden*
 
 ## Debugger ...................................................................:
 
