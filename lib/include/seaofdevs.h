@@ -3,24 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <ncurses.h>
 
-typedef struct map_s map_t;
-typedef struct game_s game_t;
+#define BUFFER 256
 
-/**
- * @brief Structure qui definit une carte de Sea Of Devs.
- * 
- * char *typeCarte : Type de la carte.
- * int tailleX     : Largeur de la carte.
- * int tailleY     : Hauteur de la carte.
- */
-struct map_s
-{
-    char *typeCarte;
-    int tailleX;
-    int tailleY;
-};
+typedef struct game_s game_t;
 
 /**
  * @brief Structure qui caracterise une partie de Sea Of Devs.
@@ -32,6 +20,9 @@ struct map_s
  */
 struct game_s
 {
+    char *typeCarte;
+    int tailleX;
+    int tailleY;
     int nbJoueurs;
     int Cmax;
     int Kmax;

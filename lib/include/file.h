@@ -46,6 +46,6 @@ int close_file(file_t file);
  * @param f 
  * @return ssize_t 
  */
-map_t read_map(file_t f);
+game_t read_game_info(file_t f);
 
 #endif

@@ -50,3 +50,8 @@ clean :
 gdb : compil
 	$(info Debbugage avec $@ :)
 	gdb --args ./$(EXEC) $(ARGS)
+
+## Archivage ..................................................................:
+
+tar :
+	tar -zcvf ../CHIKAR_Soufiane-LEFEBVRE_Theo.tar.gz *
