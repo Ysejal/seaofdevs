@@ -1,5 +1,3 @@
-#include "navalmap.h"
-
 // Initialise la carte avec des entités maritimes (ENT_SEA)
 // \param								nmap				Carte navale
 void rect_initEntityMap(

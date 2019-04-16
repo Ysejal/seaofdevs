@@ -3,8 +3,10 @@
 ## Compilateur ................................................................:
 
 CC = gcc
-CFLAGS = -g3 -Wall -lncurses
+CFLAGS = -g3 -Wall -lncurses -Wno-unused-but-set-variable
 LDFLAGS = -lm -lncurses
+LIBS = -L./lib -lnm
+INCLUDES =  -I./lib/include
 
 ## Structure du projet ........................................................:
 
@@ -32,7 +34,7 @@ compil : $(EXEC)
 
 $(EXEC) : $(OBJ)
 	$(info Édition des liens dans $(EXEC) :)
-	$(CC) $^ -o $(EXEC) $(LDFLAGS)
+	$(CC) $^ $(INCLUDES) -o $(EXEC) $(LDFLAGS) $(LIBS)
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c $(INC_PATH)%.h
 	$(info Compilation de $< :)

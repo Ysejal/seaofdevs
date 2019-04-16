@@ -1,19 +1,13 @@
 #ifndef _H_FILE_
 #define _H_FILE_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
+#include "seaofdevs.h"
+#include "navalmap.h"
 
 typedef struct file_s file_t;
 
 /**
- * @brief 
+ * @brief Structure representant un fichier
  * 
  */
 struct file_s
@@ -33,7 +27,7 @@ struct file_s
 file_t open_file(const char *chemin, int acces);
 
 /**
- * @brief 
+ * @brief Fermeture du fichier
  * 
  * @param file 
  * @return int 
@@ -47,5 +41,21 @@ int close_file(file_t file);
  * @return ssize_t 
  */
 game_t read_game_info(file_t f);
+
+/**
+ * @brief Get the map t object
+ * 
+ * @param game_info 
+ * @return map_t 
+ */
+map_t getmap_t(game_t game_info);
+
+/**
+ * @brief Get the coord object
+ * 
+ * @param game_info 
+ * @return coord_t 
+ */
+coord_t getcoord_t(game_t game_info);
 
 #endif
