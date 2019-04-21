@@ -11,14 +11,13 @@
 #include <fcntl.h>
 #include <string.h>
 #include <time.h>
-
+#include <pthread.h>
 #include <ctype.h>
 
-#include <ncurses.h>
-
-const int BUFFER = 256;
+#define BUFFER 256
 
 typedef struct game_s game_t;
+typedef struct ship_s ship_t;
 
 /**
  * @brief Structure qui caracterise une partie de Sea Of Devs
@@ -43,12 +42,12 @@ struct game_s
  * @brief Structure qui represente un navire
  * 
  */
-struct ship_t
+struct ship_s
 {
-    char *ship_name;
     int id;
-    int C;
-    int K;
+    int x, y;
+    int coque;
+    int kerosene;
 };
 
 #endif

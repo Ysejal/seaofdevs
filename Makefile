@@ -3,8 +3,8 @@
 ## Compilateur ................................................................:
 
 CC = gcc
-CFLAGS = -g3 -Wall -lncurses -Wno-unused-but-set-variable
-LDFLAGS = -lm -lncurses
+CFLAGS = -g3 -Wall -pthread
+LDFLAGS = -lm -pthread
 LIBS = -L./lib -lnm
 INCLUDES =  -I./lib/include
 
@@ -24,7 +24,7 @@ ARGS = file/fichier.sod
 
 ## Lancement ..................................................................:
 
-test : compil 
+run : compil 
 	$(info Lancement de $(EXEC) :)
 	./$(EXEC) $(ARGS)
 
@@ -49,7 +49,7 @@ clean :
 
 ## Debugger ...................................................................:
 
-gdb : compil
+debug : compil
 	$(info Debbugage avec $@ :)
 	gdb --args ./$(EXEC) $(ARGS)
 

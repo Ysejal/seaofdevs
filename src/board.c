@@ -1,20 +1,44 @@
 #include "../lib/include/seaofdevs.h"
+#include "../lib/include/navalmap.h"
 
-WINDOW *board;
-
-void draw_game_board(game_t g)
+/**
+ * @brief Convert entity_t to char
+ * 
+ * @param e 
+ * @return char 
+ */
+char entitytochar(entity_t e)
 {
-    /* Initialisation de Ncurses */
-    initscr();
-    /* On desactive le curseur */
-    curs_set(0);
-    /* Initialisation de la grille de Jeu */
-    board = newwin(g.tailleX * 3, g.tailleY * 6, 0, 0);
-    box(board, 0, 0);
-    /* On affiche la grille */
-    wrefresh(board);
-    /* On attend la touche d'arret */
-    wgetch(board);
-    /* Fin de Ncurses */
-    endwin();
+    if (e == ENT_SEA)
+    {
+        return '.';
+    }
+    else if (e == ENT_SHIP)
+    {
+        return '*';
+    }
+    else
+    {
+        perror("error : entity type");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @brief Draw navalmap
+ * 
+ * @param nm 
+ */
+void draw_navalmap(navalmap_t *nm)
+{
+    printf("mapsize %dx%d \n", nm->size.y, nm->size.x);
+
+    for (int i = 0; i < nm->size.y; i++)
+    {
+        for (int j = 0; j < nm->size.x; j++)
+        {
+            printf("\x1B[37;7m %c \033[0m", entitytochar(nm->map[i][j].type));
+        }
+        printf("\n");
+    }
 }

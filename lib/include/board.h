@@ -3,10 +3,8 @@
 
 #include "seaofdevs.h"
 
-/**
- * @brief Affiche la map depuis les informations du fichier.
- * 
- */
-void draw_game_board(game_t g);
+void draw_navalmap(navalmap_t *nm);
+
+char entitytochar(entity_t e);
 
 #endif
