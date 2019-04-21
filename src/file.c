@@ -16,7 +16,7 @@ file_t open_file(const char *chemin, int acces)
 
     if ((file_1.descriptor = open(chemin, acces)) == -1)
     {
-        perror("error : opening file");
+        perror("[\x1b[31mError\x1b[0m] : opening file");
         exit(EXIT_FAILURE);
     }
 
@@ -89,7 +89,7 @@ map_t getmap_t(game_t game_info)
     }
     else
     {
-        perror("error : map type");
+        printf("[\x1b[31mError\x1b[0m] : check map type please !\n");
         exit(EXIT_FAILURE);
     }
 

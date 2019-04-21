@@ -1,8 +1,6 @@
-# Variables ...................................................................:
+## Variables ...................................................................:
 
-## Compilateur ................................................................:
-
-CC = gcc
+CC = @gcc
 CFLAGS = -g3 -Wall -pthread
 LDFLAGS = -lm -pthread
 LIBS = -L./lib -lnm
@@ -25,20 +23,17 @@ ARGS = file/fichier.sod
 ## Lancement ..................................................................:
 
 run : compil 
-	$(info Lancement de $(EXEC) :)
-	./$(EXEC) $(ARGS)
+	@./$(EXEC) $(ARGS)
 
 ## Compilation ................................................................:
 
 compil : $(EXEC)
 
 $(EXEC) : $(OBJ)
-	$(info Édition des liens dans $(EXEC) :)
-	$(CC) $^ $(INCLUDES) -o $(EXEC) $(LDFLAGS) $(LIBS)
+	@$(CC) $^ $(INCLUDES) -o $(EXEC) $(LDFLAGS) $(LIBS)
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c $(INC_PATH)%.h
-	$(info Compilation de $< :)
-	$(CC) -c $< -o $@ $(CFLAGS)
+	@$(CC) -c $< -o $@ $(CFLAGS)
 
 ## Nettoyage ..................................................................:
 

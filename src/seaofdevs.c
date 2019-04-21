@@ -7,7 +7,7 @@ void *shipjob(void *arg)
 {
     long tid;
     tid = (long)arg;
-    printf("[Player] : shipid #%ld!\n", tid);
+    printf("[\x1b[33mPlayer\x1b[0m] : ship id #%ld\n", tid);
     pthread_exit(NULL);
 }
 
@@ -21,19 +21,24 @@ int main(int argc, char **argv)
     file_t fichier;
     game_t game_info;
     navalmap_t *sod_map = NULL;
-
     int rc;
     long t;
     void *status;
 
+    printf("[\x1b[32mServer\x1b[0m] : welcome to the sea of devs !\n");
+
     /* File Parse */
     fichier = open_file(argv[1], O_RDONLY);
+    printf("[\x1b[32mServer\x1b[0m] : reading %s\n", argv[1]);
     game_info = read_game_info(fichier);
 
     /* Navalmap */
     map_t map = getmap_t(game_info);
     coord_t size_map = getcoord_t(game_info);
     sod_map = init_navalmap(map, size_map, game_info.nbJoueurs);
+
+    /* Place ships */
+    placeRemainingShipsAtRandom(sod_map);
 
     /* Draw Navalmap */
     draw_navalmap(sod_map);
@@ -47,11 +52,11 @@ int main(int argc, char **argv)
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     for (t = 0; t < game_info.nbJoueurs; t++)
     {
-        printf("[Server] : init ship #%ld\n", t);
+        printf("[\x1b[32mServer\x1b[0m] : initialize ship #%ld\n", t);
         rc = pthread_create(&ships[t], &attr, shipjob, (void *)t);
         if (rc)
         {
-            printf("ERROR; return code from pthread_create() is %d\n", rc);
+            printf("[\x1b[31mError\x1b[0m] : return code from pthread_create() is %d\n", rc);
             exit(-1);
         }
     }
@@ -63,10 +68,10 @@ int main(int argc, char **argv)
         rc = pthread_join(ships[t], &status);
         if (rc)
         {
-            printf("ERROR; return code from pthread_join() is %d\n", rc);
+            printf("[\x1b[31mError\x1b[0m] : return code from pthread_join() is %d\n", rc);
             exit(-1);
         }
-        printf("[Server] : completed join with player %ld having a status of %ld\n", t, (long)status);
+        printf("[\x1b[32mServer\x1b[0m] : completed join with ship #%ld having a status of %ld\n", t, (long)status);
     }
 
     /* End Routines */

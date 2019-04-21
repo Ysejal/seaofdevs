@@ -19,7 +19,7 @@ char entitytochar(entity_t e)
     }
     else
     {
-        perror("error : entity type");
+        perror("[\x1b[31mError\x1b[0m] : entity type");
         exit(EXIT_FAILURE);
     }
 }
@@ -31,13 +31,13 @@ char entitytochar(entity_t e)
  */
 void draw_navalmap(navalmap_t *nm)
 {
-    printf("mapsize %dx%d \n", nm->size.y, nm->size.x);
+    printf("[\x1b[32mServer\x1b[0m] : drawing %dx%d map\n", nm->size.y, nm->size.x);
 
     for (int i = 0; i < nm->size.y; i++)
     {
         for (int j = 0; j < nm->size.x; j++)
         {
-            printf("\x1B[37;7m %c \033[0m", entitytochar(nm->map[i][j].type));
+            printf("\x1B[37;7m %c \x1b[0m", entitytochar(nm->map[i][j].type));
         }
         printf("\n");
     }
