@@ -10,15 +10,6 @@ void *playerjob(void *arg)
     pthread_exit(NULL);
 }
 
-void *managerjob(void *arg)
-{
-    game_t *game_info = (game_t *)arg;
-    /* On commence le premier */
-    int turn = 1;
-    printf("[\x1b[34mManager\x1b[0m] : turn %d/%d\n", turn, game_info->nbTours);
-    pthread_exit(NULL);
-}
-
 int main(int argc, char **argv)
 {
     /* Seed */
@@ -40,7 +31,7 @@ int main(int argc, char **argv)
 
     /* Tubes pour chaque Joueurs */
     pipe_t *toPlayer = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
-    pipe_t *toManager = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
+    pipe_t *toServer = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
 
     /* Navalmap */
     map_t map = getmap_t(game_info);
@@ -56,13 +47,11 @@ int main(int argc, char **argv)
 
     /* Threads */
     pthread_t players[game_info.nbJoueurs];
-    pthread_t manager;
 
     /* Navires */
     ship_t ships[game_info.nbJoueurs];
 
     /* Initialize and set thread detached attribute */
-    pthread_create(&manager, NULL, managerjob, (void *)&game_info);
     for (i = 0; i < game_info.nbJoueurs; i++)
     {
         /* Initialize Default Sihp */
@@ -72,12 +61,11 @@ int main(int argc, char **argv)
         ships[i].coord = sod_map->shipPosition[i];
         /* Initialize Pipe */
         pipe(toPlayer[i].fd);
-        pipe(toManager[i].fd);
+        pipe(toServer[i].fd);
         pthread_create(&players[i], NULL, playerjob, (void *)&ships[i]);
     }
 
     /* Free attribute and wait for the other threads */
-    pthread_join(manager, NULL);
     for (i = 0; i < game_info.nbJoueurs; i++)
     {
         pthread_join(players[i], NULL);
