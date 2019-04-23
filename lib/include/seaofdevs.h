@@ -13,20 +13,18 @@
 #include <time.h>
 #include <pthread.h>
 #include <ctype.h>
+#include <math.h>
+
+#include "navalmap.h"
 
 #define BUFFER 256
 
 typedef struct game_s game_t;
 typedef struct ship_s ship_t;
+typedef struct pipe_s pipe_t;
 
-/**
- * @brief Structure qui caracterise une partie de Sea Of Devs
- * 
- * int nbJoueurs : Nombre de joueurs dans la partie
- * int Cmax      : Valeurs initiales de la Coque
- * int Kmax      : Valeurs initiales du Kerosene
- * int nbTours   : Le nombre de tours max
- */
+typedef enum action action_t;
+
 struct game_s
 {
     char *typeCarte;
@@ -38,16 +36,29 @@ struct game_s
     int nbTours;
 };
 
-/**
- * @brief Structure qui represente un navire
- * 
- */
 struct ship_s
 {
-    int id;
-    int x, y;
+    long id;
+    coord_t coord;
     int coque;
     int kerosene;
+};
+
+struct pipe_s
+{
+    int fd[2];
+};
+
+enum action
+{
+    ATK,
+    BBS,
+    BST,
+    MOV,
+    MIN,
+    SCN,
+    SCp,
+    RPR
 };
 
 #endif

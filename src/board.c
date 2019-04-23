@@ -1,12 +1,5 @@
 #include "../lib/include/seaofdevs.h"
-#include "../lib/include/navalmap.h"
 
-/**
- * @brief Convert entity_t to char
- * 
- * @param e 
- * @return char 
- */
 char entitytochar(entity_t e)
 {
     if (e == ENT_SEA)
@@ -24,11 +17,6 @@ char entitytochar(entity_t e)
     }
 }
 
-/**
- * @brief Draw navalmap
- * 
- * @param nm 
- */
 void draw_navalmap(navalmap_t *nm)
 {
     printf("[\x1b[32mServer\x1b[0m] : drawing %dx%d map\n", nm->size.y, nm->size.x);

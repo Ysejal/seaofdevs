@@ -1,8 +1,8 @@
-## Variables ...................................................................:
+## Variables ..................................................................:
 
-CC = @gcc
-CFLAGS = -g3 -Wall -pthread
-LDFLAGS = -lm -pthread
+CC = gcc
+CFLAGS = -g3 -Wall -lpthread
+LDFLAGS = -lm -lpthread
 LIBS = -L./lib -lnm
 INCLUDES =  -I./lib/include
 
