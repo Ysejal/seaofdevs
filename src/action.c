@@ -23,7 +23,7 @@ int s_radar_scn(ship_t *source, navalmap_t *nm)
             }
         }
     }
-
+    /* Print Info */
     printf("[\x1b[33mPlayer\x1b[0m] : le proche de ship #%ld est ship #%d en (%d;%d) avec une distance de %d\n", source->id, shipid, c.x, c.y, res);
     return res;
 }
