@@ -5,6 +5,8 @@
 
 int a_attaque_atk(ship_t *source, ship_t *cible);
 
-int s_radar_scn(ship_t *source, navalmap_t *nm);
+coord_t s_radar_scn(ship_t *source, navalmap_t *nm);
+
+void m_deplacer_mov(ship_t *source, navalmap_t *nm, direction_t dir);
 
 #endif

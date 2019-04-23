@@ -19,7 +19,7 @@ char entitytochar(entity_t e)
 
 void draw_navalmap(navalmap_t *nm)
 {
-    printf("[\x1b[32mServer\x1b[0m] : drawing %dx%d map\n", nm->size.y, nm->size.x);
+    printf("[\x1b[32mServer\x1b[0m] : drawing %dx%d map with %d players\n", nm->size.y, nm->size.x, nm->nbShips);
 
     for (int i = 0; i < nm->size.y; i++)
     {

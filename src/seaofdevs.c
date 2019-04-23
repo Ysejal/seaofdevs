@@ -6,7 +6,16 @@
 void *playerjob(void *arg)
 {
     ship_t *ship = (ship_t *)arg;
-    printf("[\x1b[33mPlayer\x1b[0m] : ship #%ld %dC %dK at (%d;%d) \n", ship->id, ship->coque, ship->kerosene, ship->coord.x, ship->coord.y);
+    printf("[\x1b[33mPlayer\x1b[0m] : ship #%d %dC %dK at (%d;%d) \n", ship->id, ship->coque, ship->kerosene, ship->coord.x, ship->coord.y);
+    pthread_exit(NULL);
+}
+
+void *managerjob(void *arg)
+{
+    game_t *game_info = (game_t *)arg;
+    /* On commence le premier */
+    int turn = 1;
+    printf("[\x1b[34mManager\x1b[0m] : turn %d/%d\n", turn, game_info->nbTours);
     pthread_exit(NULL);
 }
 
@@ -20,10 +29,7 @@ int main(int argc, char **argv)
     file_t fichier;
     game_t game_info;
     navalmap_t *sod_map = NULL;
-
-    int rc;
-    void *status;
-    long t;
+    int i;
 
     printf("[\x1b[32mServer\x1b[0m] : welcome to the sea of devs !\n");
 
@@ -31,6 +37,10 @@ int main(int argc, char **argv)
     fichier = open_file(argv[1], O_RDONLY);
     printf("[\x1b[32mServer\x1b[0m] : reading %s\n", argv[1]);
     game_info = read_game_info(fichier);
+
+    /* Tubes pour chaque Joueurs */
+    pipe_t *toPlayer = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
+    pipe_t *toManager = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
 
     /* Navalmap */
     map_t map = getmap_t(game_info);
@@ -45,50 +55,42 @@ int main(int argc, char **argv)
 
     /* Threads */
     pthread_t players[game_info.nbJoueurs];
-    pthread_attr_t attr;
+    pthread_t manager;
 
+    /* Navires */
     ship_t ships[game_info.nbJoueurs];
 
     /* Initialize and set thread detached attribute */
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    for (t = 0; t < game_info.nbJoueurs; t++)
+    pthread_create(&manager, NULL, managerjob, (void *)&game_info);
+    for (i = 0; i < game_info.nbJoueurs; i++)
     {
         /* Initialize Default Sihp */
-        ships[t].id = t;
-        ships[t].coque = game_info.Cmax;
-        ships[t].kerosene = game_info.Kmax;
-        ships[t].coord = sod_map->shipPosition[t];
-        printf("[\x1b[32mServer\x1b[0m] : initialize ship #%ld\n", ships[t].id);
-        rc = pthread_create(&players[t], &attr, playerjob, (void *)&ships[t]);
-        if (rc)
-        {
-            printf("[\x1b[31mError\x1b[0m] : return code from pthread_create() is %d\n", rc);
-            exit(-1);
-        }
+        ships[i].id = i;
+        ships[i].coque = game_info.Cmax;
+        ships[i].kerosene = game_info.Kmax;
+        ships[i].coord = sod_map->shipPosition[i];
+        /* Initialize Pipe */
+        pipe(toPlayer[i].fd);
+        pipe(toManager[i].fd);
+        pthread_create(&players[i], NULL, playerjob, (void *)&ships[i]);
     }
 
     /* Debug */
     /* Test Radar */
-    s_radar_scn(&ships[0], sod_map);
+    s_radar_scn(&ships[2], sod_map);
+    a_attaque_atk(&ships[2], &ships[1]);
 
     /* Free attribute and wait for the other threads */
-    pthread_attr_destroy(&attr);
-    for (t = 0; t < game_info.nbJoueurs; t++)
+    pthread_join(manager, NULL);
+    for (i = 0; i < game_info.nbJoueurs; i++)
     {
-        rc = pthread_join(players[t], &status);
-        if (rc)
-        {
-            printf("[\x1b[31mError\x1b[0m] : return code from pthread_join() is %d\n", rc);
-            exit(EXIT_FAILURE);
-        }
-        printf("[\x1b[32mServer\x1b[0m] : completed join with ship #%ld having a status of %ld\n", ships[t].id, (long)status);
+        pthread_join(players[i], NULL);
+        printf("[\x1b[32mServer\x1b[0m] : completed join with ship #%d\n", ships[i].id);
     }
 
     /* End Routines */
     free_navalmap(sod_map);
     close_file(fichier);
     printf("[\x1b[32mServer\x1b[0m] : program completed. Exiting.\n");
-    pthread_exit(NULL);
     return 0;
 }

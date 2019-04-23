@@ -56,6 +56,12 @@ game_t read_game_info(file_t f)
     game_info.Kmax = atoi(Kmax);
     game_info.nbTours = atoi(nbTours);
 
+    if (game_info.nbJoueurs <= 1)
+    {
+        printf("[\x1b[31mError\x1b[0m] : check nbPlayers !\n");
+        exit(EXIT_FAILURE);
+    }
+
     return game_info;
 }
 
