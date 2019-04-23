@@ -44,6 +44,8 @@
 
 # VS
 .vscode/
+*.bin
+*.ipch
 
 # Kernel Module Compile Results
 *.mod*
