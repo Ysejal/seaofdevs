@@ -2,7 +2,7 @@
 
 coord_t s_radar_scn(ship_t *source, navalmap_t *nm)
 {
-    coord_t pos;
+    coord_t vecteur;
     int min = 0;
     int dist = nm->size.x * nm->size.y;
     int i;
@@ -16,14 +16,14 @@ coord_t s_radar_scn(ship_t *source, navalmap_t *nm)
             if (min < dist)
             {
                 dist = min;
-                pos.x = nm->shipPosition[i].x;
-                pos.y = nm->shipPosition[i].y;
+                vecteur.x = nm->shipPosition[i].x;
+                vecteur.y = nm->shipPosition[i].y;
                 shipid = i;
             }
         }
     }
-    printf("[\x1b[33mRadar\x1b[0m] : ship #%d is near ship #%d at (%d;%d) dist %d\n", source->id, shipid, pos.x, pos.y, dist);
-    return pos;
+    printf("[\x1b[33mRadar\x1b[0m] : ship #%d is near ship #%d at (%d;%d) dist %d\n", source->id, shipid, vecteur.x, vecteur.y, dist);
+    return vecteur;
 }
 
 int a_attaque_atk(ship_t *source, ship_t *cible)
@@ -56,24 +56,62 @@ int a_attaque_atk(ship_t *source, ship_t *cible)
 
 void m_deplacer_mov(ship_t *source, navalmap_t *nm, direction_t dir)
 {
+    coord_t vecteur;
     if (dir == HAUT)
     {
+        vecteur.x = -1;
+        vecteur.y = 0;
+        if (nm->isMovePossible(nm, source->id, vecteur))
+        {
+            nm->map[source->coord.y][source->coord.x].type = ENT_SEA;
+            source->coord.y -= 1;
+            nm->shipPosition[source->id].y -= 1;
+            nm->map[source->coord.y][source->coord.x].type = ENT_SHIP;
+            printf("[\x1b[33mMove\x1b[0m] : ship #%d top move to (%d;%d)\n", source->id, source->coord.x, source->coord.y);
+        }
     }
     else if (dir == BAS)
     {
-        /* code */
+        vecteur.x = +1;
+        vecteur.y = 0;
+        if (nm->isMovePossible(nm, source->id, vecteur))
+        {
+            nm->map[source->coord.y][source->coord.x].type = ENT_SEA;
+            source->coord.y += 1;
+            nm->shipPosition[source->id].y += 1;
+            nm->map[source->coord.y][source->coord.x].type = ENT_SHIP;
+            printf("[\x1b[33mMove\x1b[0m] : ship #%d down move to (%d;%d)\n", source->id, source->coord.x, source->coord.y);
+        }
     }
     else if (dir == GAUCHE)
     {
-        /* code */
+        vecteur.x = 0;
+        vecteur.y = -1;
+        if (nm->isMovePossible(nm, source->id, vecteur))
+        {
+            nm->map[source->coord.y][source->coord.x].type = ENT_SEA;
+            source->coord.x -= 1;
+            nm->shipPosition[source->id].x -= 1;
+            nm->map[source->coord.y][source->coord.x].type = ENT_SHIP;
+            printf("[\x1b[33mMove\x1b[0m] : ship #%d left move to (%d;%d)\n", source->id, source->coord.x, source->coord.y);
+        }
     }
     else if (dir == DROITE)
     {
-        /* code */
+        vecteur.x = 0;
+        vecteur.y = +1;
+        if (nm->isMovePossible(nm, source->id, vecteur))
+        {
+            nm->map[source->coord.y][source->coord.x].type = ENT_SEA;
+            source->coord.x += 1;
+            nm->shipPosition[source->id].x += 1;
+            nm->map[source->coord.y][source->coord.x].type = ENT_SHIP;
+            printf("[\x1b[33mMove\x1b[0m] : ship #%d right move to (%d;%d)\n", source->id, source->coord.x, source->coord.y);
+        }
     }
     else
     {
-        printf("[\x1b[31mError\x1b[0m] : incorrect !\n");
+        printf("[\x1b[31mError\x1b[0m] : incorrect direction !\n");
         exit(EXIT_FAILURE);
     }
 }

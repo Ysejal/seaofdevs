@@ -48,6 +48,7 @@ int main(int argc, char **argv)
     sod_map = init_navalmap(map, size_map, game_info.nbJoueurs);
 
     /* Place ships */
+    sod_map->initEntityMap(sod_map);
     placeRemainingShipsAtRandom(sod_map);
 
     /* Draw Navalmap */
@@ -74,11 +75,6 @@ int main(int argc, char **argv)
         pipe(toManager[i].fd);
         pthread_create(&players[i], NULL, playerjob, (void *)&ships[i]);
     }
-
-    /* Debug */
-    /* Test Radar */
-    s_radar_scn(&ships[2], sod_map);
-    a_attaque_atk(&ships[2], &ships[1]);
 
     /* Free attribute and wait for the other threads */
     pthread_join(manager, NULL);
