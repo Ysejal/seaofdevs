@@ -43,7 +43,7 @@
 *.pdb
 
 # VS
-*.vscode/
+.vscode/
 
 # Kernel Module Compile Results
 *.mod*
