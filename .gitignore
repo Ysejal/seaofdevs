@@ -43,6 +43,7 @@
 *.pdb
 
 # VS
+bin/
 .vscode/
 *.bin
 *.ipch
