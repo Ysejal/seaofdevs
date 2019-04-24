@@ -2,7 +2,7 @@
 
 coord_t s_radar_scn(ship_t *source, navalmap_t *nm)
 {
-    coord_t vecteur;
+    coord_t pos;
     int min = 0;
     int dist = nm->size.x * nm->size.y;
     int i;
@@ -16,14 +16,14 @@ coord_t s_radar_scn(ship_t *source, navalmap_t *nm)
             if (min < dist)
             {
                 dist = min;
-                vecteur.x = nm->shipPosition[i].x;
-                vecteur.y = nm->shipPosition[i].y;
+                pos.x = nm->shipPosition[i].x;
+                pos.y = nm->shipPosition[i].y;
                 shipid = i;
             }
         }
     }
-    printf("[\x1b[33mRadar\x1b[0m] : ship #%d is near ship #%d at (%d;%d) dist %d\n", source->id, shipid, vecteur.x, vecteur.y, dist);
-    return vecteur;
+    printf("[\x1b[33mRadar\x1b[0m] : ship #%d is near ship #%d at (%d;%d) dist %d\n", source->id, shipid, pos.x, pos.y, dist);
+    return pos;
 }
 
 int a_attaque_atk(ship_t *source, ship_t *cible)

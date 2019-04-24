@@ -70,10 +70,8 @@ enum direction
 
 struct message_s
 {
-    pthread_mutex_t mutex; //protéger des données partagées de modifications concurrentes et pour implémenter des sections critiques.
-    pthread_cond_t cond;   //permet à un thread de suspendre son exécution juqu'à ce qu'une certaine condition (un prédicat) sur des données partagées soit vérifiée
-    action_t action;       //action a traansmettre
-    coord_t position;      //changement de position effectue
+    action_t action;
+    coord_t position;
 };
 
 #endif

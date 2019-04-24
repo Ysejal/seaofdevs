@@ -5,8 +5,10 @@
 
 void *playerjob(void *arg)
 {
-    ship_t *ship = (ship_t *)arg;
-    printf("[\x1b[33mPlayer\x1b[0m] : ship #%d %dC %dK at (%d;%d) \n", ship->id, ship->coque, ship->kerosene, ship->coord.x, ship->coord.y);
+    pipe_t *info = (pipe_t *)arg;
+    message_t actions;
+    actions.action = SCN;
+    write(info->fd[1], &actions, sizeof(struct message_s));
     pthread_exit(NULL);
 }
 
@@ -33,6 +35,9 @@ int main(int argc, char **argv)
     pipe_t *toPlayer = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
     pipe_t *toServer = malloc(sizeof(struct pipe_s) * game_info.nbJoueurs);
 
+    /* Les messages que chaque thread va communiquer */
+    message_t actions[game_info.nbJoueurs];
+
     /* Navalmap */
     map_t map = getmap_t(game_info);
     coord_t size_map = getcoord_t(game_info);
@@ -51,10 +56,10 @@ int main(int argc, char **argv)
     /* Navires */
     ship_t ships[game_info.nbJoueurs];
 
-    /* Initialize and set thread detached attribute */
+    /* Initialize thread */
     for (i = 0; i < game_info.nbJoueurs; i++)
     {
-        /* Initialize Default Sihp */
+        /* Initialize Default Ship */
         ships[i].id = i;
         ships[i].coque = game_info.Cmax;
         ships[i].kerosene = game_info.Kmax;
@@ -62,10 +67,20 @@ int main(int argc, char **argv)
         /* Initialize Pipe */
         pipe(toPlayer[i].fd);
         pipe(toServer[i].fd);
-        pthread_create(&players[i], NULL, playerjob, (void *)&ships[i]);
+        pthread_create(&players[i], NULL, playerjob, (void *)&toServer);
+        printf("[\x1b[32mServer\x1b[0m] : Initialize ship #%d with %dC %dK at (%d;%d)\n", ships[i].id, ships[i].coque, ships[i].kerosene, ships[i].coord.x, ships[i].coord.y);
     }
 
-    /* Free attribute and wait for the other threads */
+    for (int tour = 1; tour <= game_info.nbTours; tour++)
+    {
+        for (int p = 0; p < game_info.nbJoueurs; p++)
+        {
+            read(toServer[p].fd[0], actions, sizeof(struct message_s) * game_info.nbJoueurs);
+            printf("[\x1b[32mServer\x1b[0m] : turn %d/%d\n", tour, game_info.nbTours);
+        }
+    }
+
+    /* Wait for the other threads */
     for (i = 0; i < game_info.nbJoueurs; i++)
     {
         pthread_join(players[i], NULL);
