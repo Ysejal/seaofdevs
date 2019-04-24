@@ -24,6 +24,7 @@ typedef struct game_s game_t;
 typedef struct ship_s ship_t;
 typedef struct pipe_s pipe_t;
 typedef struct message_s message_t;
+typedef struct seaofdevs_s seaofdevs_t;
 
 typedef enum action action_t;
 typedef enum direction direction_t;
@@ -47,11 +48,6 @@ struct ship_s
     int kerosene;
 };
 
-struct pipe_s
-{
-    int fd[2];
-};
-
 enum action
 {
     ATK,
@@ -70,8 +66,17 @@ enum direction
 
 struct message_s
 {
+    pthread_mutex_t mut;
+    int fd[2];
     action_t action;
-    coord_t position;
+    ship_t *a_ship;
+};
+
+struct seaofdevs_s
+{
+    navalmap_t *nm;
+    ship_t *ships;
+    game_t game_info;
 };
 
 #endif

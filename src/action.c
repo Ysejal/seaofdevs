@@ -26,6 +26,17 @@ coord_t s_radar_scn(ship_t *source, navalmap_t *nm)
     return pos;
 }
 
+int isRangeAttack(ship_t *source, coord_t cible)
+{
+    int dist = 0;
+
+    dist = sqrt(pow(cible.y - source->coord.y, 2) + pow(cible.x - source->coord.x, 2));
+    if (dist <= 2)
+        return 1;
+    else
+        return 0;
+}
+
 int a_attaque_atk(ship_t *source, ship_t *cible)
 {
     if (source->id == cible->id)

@@ -9,4 +9,6 @@ coord_t s_radar_scn(ship_t *source, navalmap_t *nm);
 
 void m_deplacer_mov(ship_t *source, navalmap_t *nm, direction_t dir);
 
+int isRangeAttack(ship_t *source, coord_t cible);
+
 #endif
